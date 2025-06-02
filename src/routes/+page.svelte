@@ -9,6 +9,7 @@
   import CartModal from '../lib/components/CartModal.svelte';
   import SettingsModal from '../lib/components/SettingsModal.svelte';
   import Toast from '../lib/components/Toast.svelte'; // Import the new Toast component
+  import ToastContainer from '../lib/components/ToastContainer.svelte';
   import { getStockStatus } from '../lib/utils/helper.js'; // parseCSV será usado pelo productService
   import { fetchProducts } from '../lib/services/productService.js';
   import { 
@@ -299,15 +300,5 @@
     on:setViewMode={(event) => setViewMode(event.detail)}
 />
 
-<!-- Toast Container - Managed by +page.svelte -->
-<div id="toast-container-managed" aria-live="assertive">
-    {#each activeToasts as toast (toast.id)}
-        <Toast
-            id={toast.id}
-            message={toast.message}
-            type={toast.type}
-            duration={toast.duration}
-            on:remove={handleRemoveToast}
-        />
-    {/each}
-</div>
+<!-- Toast Container - Managed by ToastContainer.svelte -->
+<ToastContainer toasts={activeToasts} removeToast={id => handleRemoveToast({ detail: { id } })} />
