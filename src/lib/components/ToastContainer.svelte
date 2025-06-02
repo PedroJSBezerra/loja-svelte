@@ -1,5 +1,6 @@
 <script>
-  import { onDestroy, tick } from 'svelte';
+  import { onDestroy } from 'svelte';
+  import { fly } from 'svelte/transition'; // Importar transição do Svelte
 
   export let toasts = [];
   export let removeToast = (id) => {};
@@ -7,45 +8,37 @@
   // Exibe apenas o primeiro toast da fila
   $: currentToast = toasts.length > 0 ? toasts[0] : null;
 
-  let visible = false;
-  let timer;
+  let autoDismissTimer;
 
-  // Sempre que o toast muda, faz animação de entrada e inicia timer
-  $: if (currentToast) {
-    showToast();
-  } else {
-    visible = false;
-    clearTimeout(timer);
-  }
-
-  async function showToast() {
-    visible = false;
-    clearTimeout(timer);
-    await tick();
-    visible = true;
-    timer = setTimeout(() => {
-      startRemove(currentToast.id);
-    }, currentToast.duration || 3000);
-  }
-
-  function startRemove(id) {
-    visible = false;
-    setTimeout(() => {
-      removeToast(id);
-    }, 300); // tempo da transição CSS
+  // Reativo para gerenciar o auto-dismiss do toast atual
+  $: {
+    clearTimeout(autoDismissTimer); // Limpa o timer anterior sempre que currentToast muda
+    if (currentToast) {
+      autoDismissTimer = setTimeout(() => {
+        // Quando o timer expira, chama a função removeToast do pai.
+        // Isso fará com que currentToast mude (para o próximo toast ou para null).
+        // O Svelte então verá o elemento "keyeado" mudar/desaparecer,
+        // disparando sua transição 'out'.
+        if (currentToast) { // Verifica novamente, pois currentToast pode ter mudado
+            removeToast(currentToast.id);
+        }
+      }, currentToast.duration || 3000);
+    }
   }
 
   onDestroy(() => {
-    clearTimeout(timer);
+    clearTimeout(autoDismissTimer);
   });
 </script>
 
 <div id="toast-container" aria-live="assertive">
   {#if currentToast}
     <div
-      class="toast {currentToast.type} {visible ? 'visible' : ''}"
+      class="toast {currentToast.type}"
       role="alert"
       aria-live="assertive"
+      key={currentToast.id}
+      transition:fly={{ y: -60, duration: 300 }}
     >
       <i class="fas {currentToast.type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
       <span>{currentToast.message}</span>
@@ -60,7 +53,7 @@
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 1050; /* Acima de modals comuns (Bootstrap usa 1040/1050) */
   display: flex;
   flex-direction: column;
   align-items: center;
