@@ -1,41 +1,56 @@
 <script>
-  import { onDestroy } from 'svelte';
-  import Toast from './Toast.svelte';
+  import { onDestroy, tick } from 'svelte';
 
   export let toasts = [];
   export let removeToast = (id) => {};
 
-  // Remove toast automaticamente após a duração
-  let timers = {};
+  // Exibe apenas o primeiro toast da fila
+  $: currentToast = toasts.length > 0 ? toasts[0] : null;
 
-  $: {
-    // Para cada toast novo, inicia um timer se não existir
-    toasts.forEach(toast => {
-      if (!timers[toast.id]) {
-        timers[toast.id] = setTimeout(() => {
-          removeToast(toast.id);
-          delete timers[toast.id];
-        }, toast.duration || 3000);
-      }
-    });
+  let visible = false;
+  let timer;
+
+  // Sempre que o toast muda, faz animação de entrada e inicia timer
+  $: if (currentToast) {
+    showToast();
+  } else {
+    visible = false;
+    clearTimeout(timer);
   }
 
-  // Limpa timers ao destruir componente
+  async function showToast() {
+    visible = false;
+    clearTimeout(timer);
+    await tick();
+    visible = true;
+    timer = setTimeout(() => {
+      startRemove(currentToast.id);
+    }, currentToast.duration || 3000);
+  }
+
+  function startRemove(id) {
+    visible = false;
+    setTimeout(() => {
+      removeToast(id);
+    }, 300); // tempo da transição CSS
+  }
+
   onDestroy(() => {
-    Object.values(timers).forEach(clearTimeout);
+    clearTimeout(timer);
   });
 </script>
 
 <div id="toast-container" aria-live="assertive">
-  {#each toasts as toast (toast.id)}
-    <Toast
-      id={toast.id}
-      message={toast.message}
-      type={toast.type}
-      duration={toast.duration}
-      on:remove={() => removeToast(toast.id)}
-    />
-  {/each}
+  {#if currentToast}
+    <div
+      class="toast {currentToast.type} {visible ? 'visible' : ''}"
+      role="alert"
+      aria-live="assertive"
+    >
+      <i class="fas {currentToast.type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+      <span>{currentToast.message}</span>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -44,32 +59,51 @@
   top: 0;
   left: 0;
   right: 0;
-  width: 100%; /* Garante que ocupe a largura total */
-
-  /* Sem animações de transição (mantido) */
-  transition: none;
-
-  /* Garante que fique acima de outros elementos (mantido) */
+  width: 100%;
   z-index: 1000;
-
-  /* Altura e padding para torná-lo discreto */
-  height: auto; /* Altura baseada no conteúdo */
-  padding: 0;
-  box-sizing: border-box; /* Mantido para width: 100% */
-
-  /* Sombra discreta */
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2); /* <-- Sombra discreta de 3px */
-
-  /* Estilos de aparência (ajuste para ser discreto, mantidos ou ajustados levemente) */
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  text-align: center;
-  font-size: 0.9em;
-  border-radius: 0;
-
-  /* Garante visibilidade (mantido) */
-  display: block;
-  visibility: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+.toast {
+  pointer-events: auto;
+  position: relative;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  min-width: 250px;
+  max-width: 400px;
+  background-color: var(--toast-default-bg, #333);
+  border: none;
+  outline: none;
+  font: inherit;
+  text-align: left;
+}
+.toast.visible {
   opacity: 1;
+  transform: translateY(0);
+}
+.toast.success {
+  background-color: var(--success-color, #28a745);
+}
+.toast.error {
+  background-color: var(--error-color, #dc3545);
+}
+.toast i {
+  font-size: 1.2em;
+}
+.toast span {
+  flex-grow: 1;
 }
 </style>

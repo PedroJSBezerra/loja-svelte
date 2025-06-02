@@ -8,7 +8,6 @@
   import ProductModal from '../lib/components/ProductModal.svelte';
   import CartModal from '../lib/components/CartModal.svelte';
   import SettingsModal from '../lib/components/SettingsModal.svelte';
-  import Toast from '../lib/components/Toast.svelte'; // Import the new Toast component
   import ToastContainer from '../lib/components/ToastContainer.svelte';
   import { getStockStatus } from '../lib/utils/helper.js'; // parseCSV será usado pelo productService
   import { fetchProducts } from '../lib/services/productService.js';
