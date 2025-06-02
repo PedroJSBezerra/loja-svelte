@@ -1,0 +1,1040 @@
+/* --- INÍCIO DO CSS --- */
+/* Variáveis CSS */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root,
+body:not(.dark-mode) {
+    --primary-blue: #1877F2;
+    --background-gray: #f0f2f5;
+    --card-background: #ffffff;
+    --text-primary: #050505;
+    --text-secondary: #65676b;
+    --border-color: #ced0d4;
+    --green-stock: #31a24c;
+    --orange-stock: #f7b928;
+    --red-stock: #f02849;
+    --button-green: #28a745;
+    --button-red: #dc3545;
+    --button-hover: #0056b3;
+    --toast-background: #333;
+    --toast-text: #ffffff;
+    --modal-overlay: rgba(0, 0, 0, 0.7);
+    --scrollbar-thumb: #c1c1c1;
+    --scrollbar-track: var(--background-gray);
+    --transition-speed: 0.3s;
+}
+
+body.dark-mode {
+    --primary-blue: #1877F2; /* Assuming blue remains consistent */
+    --background-gray: #18191a;
+    --card-background: #242526;
+    --text-primary: #e4e6eb;
+    --text-secondary: #b0b3b8;
+    --border-color: #3a3b3c;
+    --button-hover: #3b8bf4; /* Lighter blue for hover in dark mode */
+    --toast-background: #e4e6eb; /* Light background for toast in dark mode */
+    --toast-text: #1c1e21;       /* Dark text for toast in dark mode */
+    --modal-overlay: rgba(0, 0, 0, 0.8); /* Slightly darker overlay for dark mode */
+    --scrollbar-thumb: #555;
+    --scrollbar-track: var(--background-gray); /* Uses dark background */
+    /* --transition-speed is already defined and can be reused */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    width: 100%;
+    background-color: var(--background-gray);
+    color: var(--text-primary);
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    -ms-content-zooming: none;
+    touch-action: manipulation; /* Prevents double-tap to zoom on touch devices */
+}
+
+header {
+    background-color: var(--card-background);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    height: 56px; /* Fixed height */
+    justify-content: space-between;
+}
+
+header h1 { /* Not used in current Svelte template, but kept if needed */
+    font-size: 1.5em;
+    margin: 0;
+    font-weight: 700;
+}
+
+header input[type="text"] {
+    border: none;
+    background-color: var(--background-gray);
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 1em;
+    flex-grow: 1;
+    max-width: 400px;
+    margin: 0 15px;
+    color: var(--text-primary);
+}
+ header input[type="text"]:focus-visible {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+}
+
+.cart-icon-container {
+    font-size: 0.8em; /* Reduzido de 1.8em para 1.5em */
+    position: relative;
+    cursor: pointer;
+}
+
+.cart-icon-container i.fa-shopping-cart { /* More specific selector */
+    font-size: 1.8em;
+    color: var(--primary-blue);
+    transition: transform 0.2s ease-in-out;
+}
+
+.cart-icon-container i.fa-shopping-cart.pulse {
+    animation: pulse-cart 0.5s ease-out;
+}
+
+@keyframes pulse-cart {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15) rotate(10deg); }
+    100% { transform: scale(1); }
+}
+
+#cart-count { /* ID is fine here as it's unique and styled */
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--red-stock);
+    color: white;
+    font-size: 0.7em;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 2px 6px;
+    min-width: 15px;
+    text-align: center;
+}
+
+.settings-icon {
+    font-size: 1.4em;
+    color: var(--text-primary);
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.settings-section {
+    padding: 20px 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+.settings-section:last-child {
+    border-bottom: none;
+}
+
+.display-options-modal {
+    display: flex;
+    gap: 10px;
+}
+.display-option-btn {
+    background-color: var(--background-gray);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    flex-grow: 1;
+}
+.display-option-btn:hover {
+    background-color: var(--border-color);
+}
+.display-option-btn.active {
+    background-color: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+ .display-option-btn:focus-visible {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+}
+
+.settings-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    background-color: #87CEEB; /* Light mode switch track */
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease;
+    overflow: hidden; /* To hide icons moving out */
+}
+.switch input { /* Hide the actual checkbox */
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.switch .fas { /* Common style for sun/moon icons */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    transition: transform var(--transition-speed) ease, opacity var(--transition-speed) ease;
+}
+.switch .fa-sun {
+    left: 5px;
+    color: #f1c40f; /* Sun color */
+    opacity: 1; /* Visible in light mode (checkbox not checked) */
+    transform: translateY(-50%) translateX(0%);
+}
+.switch .fa-moon {
+    right: 5px;
+    color: #f0e68c; /* Moon color */
+    opacity: 0; /* Hidden in light mode */
+    transform: translateY(-50%) translateX(100%); /* Move out of view */
+}
+body.dark-mode .switch {
+    background-color: #483D8B; /* Dark mode switch track */
+}
+.switch input:checked ~ .fa-sun { /* When dark mode is on (checkbox checked), hide sun */
+    opacity: 0;
+    transform: translateY(-50%) translateX(-120%); /* Move out of view */
+}
+.switch input:checked ~ .fa-moon { /* When dark mode is on, show moon */
+    opacity: 1;
+    transform: translateY(-50%) translateX(0%);
+}
+.switch:focus-within { /* Apply focus to the entire switch component */
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+    border-radius: 25px; /* Match switch shape */
+}
+
+main {
+    padding: 8px;
+    /* padding-top is set inline via style attribute */
+    transition: margin-left var(--transition-speed) ease; /* For potential sidebar later */
+}
+
+.product-container {
+    display: grid;
+    gap: 8px;
+    padding-bottom: 20px; /* Space at the bottom */
+}
+.product-container.grid-view {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+@media (min-width: 600px) {
+    .product-container.grid-view {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+.product-container.list-view {
+    grid-template-columns: 1fr; /* Each item takes full width */
+}
+
+.product-card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+}
+.product-card:hover, .product-card:focus-visible {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    outline: none; /* Remove default focus outline if custom shadow is enough */
+}
+ .product-card:focus-visible {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+}
+
+.product-card.grid-item {
+    display: flex;
+    flex-direction: column;
+}
+.product-card.grid-item .image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* Creates a square aspect ratio box */
+}
+.product-card.grid-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.product-card.grid-item .info {
+    padding: 12px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card.list-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+.product-card.list-item .image-container {
+    width: 80px;
+    height: 80px;
+    margin-right: 15px;
+    flex-shrink: 0; /* Prevent image container from shrinking */
+}
+.product-card.list-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+.product-card.list-item .info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.product-card .price {
+    font-size: 1.1em;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    color: var(--text-primary);
+}
+.product-card .name {
+    font-size: 0.95em;
+    margin: 0;
+    flex-grow: 1; /* Allows name to take up available space */
+    line-height: 1.3;
+    color: var(--text-secondary);
+}
+.product-card.list-item .name { /* Specific style for name in list view */
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+.product-card .stock {
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    text-align: center;
+    align-self: flex-start; /* Align to start of flex container */
+}
+.product-card.list-item .stock { /* Specific style for stock in list view */
+    margin-top: 0;
+}
+
+.stock.high { background-color: var(--green-stock); color: white; }
+.stock.low { background-color: var(--orange-stock); color: white; }
+.stock.out { background-color: var(--red-stock); color: white; }
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modal-overlay);
+    display: flex; /* For centering modal-content */
+    align-items: center;
+    justify-content: center;
+     backdrop-filter: blur(5px); /* Adiciona o desfoque ao fundo */
+    -webkit-backdrop-filter: blur(5px); /* Para compatibilidade com Safari */
+}
+
+.modal-content {
+    background-color: var(--card-background);
+    padding: 20px; /*REMOVED - content inside will manage its padding */
+    border-radius: 8px; /* REMOVED - for fullscreen */
+    width: 90%; /*  REMOVED - for fullscreen */
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* REMOVED - for fullscreen */
+    position: relative;
+    animation: slideUp var(--transition-speed) ease-out;
+    max-height: 90vh; /* REMOVED - for fullscreen */
+    overflow-y: auto; /* Scroll for content exceeding max-height */
+    /* width: 100%;
+    height: 100%;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none; */
+}
+
+
+@keyframes slideInAndFadeOut {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    /* Transitions for color/border are inherited or can be specified if needed */
+}
+
+.settings-modal-content { /* Class for settings modal content */
+     max-width: 400px;
+}
+
+.close-button {
+    color: var(--text-secondary);
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    transition: color var(--transition-speed) ease;
+}
+.close-button:hover, .close-button:focus {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+ .close-button:focus-visible {
+    outline: 2px solid var(--primary-blue);
+    border-radius: 50%;
+}
+
+/* Product Modal specific styles */
+.product-modal-content { /* Class for product modal content */
+    max-width: 500px;
+    border-radius: 12px;
+    padding: 0; /* Override general modal padding */
+}
+.product-modal-content .close-button { /* Style close button within product modal */
+    color: #fff; /* White color for contrast on image overlay */
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px; /* Vertically center the '×' */
+    top: 15px;
+    right: 15px;
+    z-index: 10; /* Ensure it's above slider images */
+}
+
+.modal-image-slider-container { /* Replaced ID with class */
+    position: relative;
+    width: 100%;
+    padding-top: 75%; /* Aspect ratio for slider (e.g., 4:3) */
+    overflow: hidden;
+    border-top-left-radius: 12px; /* Match modal content radius */
+    border-top-right-radius: 12px;
+}
+.modal-image-slider-container .slider-images {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Container for multiple images side-by-side */
+    height: 100%;
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Smooth slide transition */
+}
+.modal-image-slider-container .slider-images img {
+    min-width: 100%; /* Each image takes full width of the viewable area */
+    height: 100%;
+    object-fit: contain; /* Show full image, letterbox if aspect ratio differs */
+    background-color: white; /* Background for letterboxing */
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 8px 12px;
+    cursor: pointer;
+    z-index: 10; /* Above images, below close button if overlapping */
+}
+.slider-btn.prev { left: 10px; }
+.slider-btn.next { right: 10px; }
+.slider-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+ .slider-btn:focus-visible {
+    outline: 2px solid white; /* Ensure visibility on dark background */
+}
+
+.slider-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+.indicator-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--border-color); /* Default dot color */
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease;
+    border: none; /* Reset button styles */
+    padding: 0;
+}
+.indicator-dot.active {
+    background-color: var(--primary-blue); /* Active dot color */
+}
+ .indicator-dot:focus-visible {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 1px;
+}
+
+.modal-details-content { padding: 20px; } /* Replaced ID with class */
+.modal-price-tag { /* Replaced ID with class */
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.modal-name-tag { /* Replaced ID with class, also used for aria-labelledby */
+    font-size: 1.2em;
+    margin: 8px 0;
+    color: var(--text-primary);
+}
+.modal-stock-tag { /* Replaced ID with class */
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 16px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    color: white; /* Text color for stock, background set by .stock.* classes */
+    display: inline-block;
+    text-align: center;
+}
+.modal-description-text { /* Replaced ID with class */
+    font-size: 1em;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    white-space: pre-wrap; /* Respect newlines in description */
+}
+
+.add-to-cart-btn {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+    transition: background-color var(--transition-speed) ease;
+}
+.add-to-cart-btn:hover {
+    background-color: var(--button-hover);
+}
+.add-to-cart-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+ .add-to-cart-btn:focus-visible {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+}
+
+/* Cart Modal specific styles */
+.cart-modal-content h2 { /* Style h2 within cart modal */
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+.cart-items-list { /* Replaced ID with class */
+    margin-top: 20px;
+    max-height: 300px; /* Example max height for scrollability */
+    overflow-y: auto;
+}
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border-color);
+}
+.cart-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.cart-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+.cart-item-details { flex-grow: 1; }
+.cart-item-details .name {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--text-primary);
+}
+.cart-item-details .price {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+.cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 15px;
+    flex-shrink: 0;
+}
+.cart-item-controls button {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.cart-item-controls button:hover {
+    background-color: var(--button-hover);
+}
+ .cart-item-controls button:focus-visible {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 1px;
+}
+.cart-item-controls span {
+    font-weight: bold;
+    min-width: 20px; /* Ensure space for quantity number */
+    text-align: center;
+}
+.empty-cart-message-text { /* Replaced ID with class */
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 20px;
+}
+.cart-summary-container { /* Replaced ID with class */
+    margin-top: 20px;
+    padding-top: 15px;
+    background-color: var(--card-background); /* Match modal background */
+    border-top: 1px solid var(--border-color);
+    text-align: right;
+}
+.cart-summary-container h3 {
+    margin: 0;
+    font-size: 1.5em;
+    color: var(--text-primary);
+}
+.cart-total-amount { color: var(--primary-blue); } /* Replaced ID with class */
+
+.clear-cart-btn {
+    background-color: var(--button-red);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color var(--transition-speed) ease;
+}
+.clear-cart-btn:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+ .clear-cart-btn:focus-visible {
+    outline: 2px solid var(--button-red);
+    outline-offset: 2px;
+}
+/* Em src/app.css ou seu arquivo CSS global */
+
+#toast-container {
+  position: fixed;
+  top: 20px;       /* Distância do topo, ajuste conforme necessário */
+  right: 20px;      /* Distância da direita, ajuste conforme necessário */
+  z-index: 9999;   /* Um valor bem alto para garantir que fique sobre a maioria dos outros elementos */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Alinha os toasts à direita se tiverem larguras diferentes */
+  /* Se os toasts NÃO devem interceptar cliques e permitir cliques nos elementos abaixo (incomum para toasts com ações): */
+  /* pointer-events: none; */
+}
+
+@keyframes slideInAndFadeOut {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* === General Styles & Light Theme (Defaults) === */
+:root {
+  --primary-color: #007bff;
+  --primary-color-darker: #0056b3;
+  --text-color-light: #333;
+  --text-color-dark: #f0f0f0;
+  --bg-color-light: #f4f7f6;
+  --bg-color-dark: #1a1a1a;
+  --card-bg-light: #ffffff;
+  --card-bg-dark: #2c2c2c;
+  --modal-bg-light: #ffffff;
+  --modal-bg-dark: #333333;
+  --border-color-light: #eee;
+  --border-color-dark: #444;
+  --header-bg-light: #ffffff;
+  --header-bg-dark: #2c2c2c;
+  --input-bg-light: #fff;
+  --input-bg-dark: #333;
+  --input-border-light: #ccc;
+  --input-border-dark: #555;
+  --toast-bg-light: #333;
+  --toast-text-light: #fff;
+  --toast-bg-dark: #444;
+  --toast-text-dark: #f0f0f0;
+  --switch-track-light: #ccc;
+  --switch-track-dark: #555; /* Or var(--primary-color) if you prefer */
+  --switch-knob-light: #fff;
+  --switch-knob-dark: #e0e0e0;
+  --icon-sun-color: #f39c12;
+  --icon-moon-color: #82c9ed; /* A cool blue for moon in dark mode */
+}
+
+body {
+  font-family: 'Arial', sans-serif; /* Consider a more modern font stack */
+  margin: 0;
+  background-color: var(--bg-color-light);
+  color: var(--text-color-light);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.6;
+}
+
+header {
+  background-color: var(--header-bg-light);
+  color: var(--text-color-light);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 56px; /* From your +page.svelte main style */
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+header input[type="text"] {
+  background-color: var(--input-bg-light);
+  color: var(--text-color-light);
+  border: 1px solid var(--input-border-light);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+header input[type="text"]::placeholder {
+  color: #999;
+  transition: color 0.3s ease;
+}
+
+.settings-icon i,
+.cart-icon-container i {
+  color: var(--text-color-light); /* Default icon color */
+  transition: color 0.3s ease;
+}
+
+.product-card {
+  background-color: var(--card-bg-light);
+  border: 1px solid var(--border-color-light);
+  color: var(--text-color-light);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  /* ... other existing .product-card styles ... */
+}
+.product-card .name, .product-card .price {
+  color: var(--text-color-light);
+  transition: color 0.3s ease;
+}
+
+
+.modal-content {
+  background-color: var(--modal-bg-light);
+  color: var(--text-color-light);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* ... other existing .modal-content styles ... */
+}
+.modal-content .close-button {
+  color: #aaa; /* Default close button color */
+  transition: color 0.3s ease;
+}
+.modal-content .close-button:hover {
+  color: #333;
+}
+
+
+/* === Dark Theme === */
+body.dark-mode {
+  background-color: var(--bg-color-dark);
+  color: var(--text-color-dark);
+}
+
+body.dark-mode header {
+  background-color: var(--header-bg-dark);
+  color: var(--text-color-dark);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+body.dark-mode header input[type="text"] {
+  background-color: var(--input-bg-dark);
+  color: var(--text-color-dark);
+  border: 1px solid var(--input-border-dark);
+}
+body.dark-mode header input[type="text"]::placeholder {
+  color: #777;
+}
+
+body.dark-mode .settings-icon i,
+body.dark-mode .cart-icon-container i {
+  color: var(--text-color-dark);
+}
+
+body.dark-mode .product-card {
+  background-color: var(--card-bg-dark);
+  border-color: var(--border-color-dark);
+  color: var(--text-color-dark);
+}
+body.dark-mode .product-card .name,
+body.dark-mode .product-card .price {
+  color: var(--text-color-dark);
+}
+
+body.dark-mode .modal-content {
+  background-color: var(--modal-bg-dark);
+  color: var(--text-color-dark);
+}
+body.dark-mode .modal-content .close-button {
+  color: #ccc;
+}
+body.dark-mode .modal-content .close-button:hover {
+  color: #fff;
+}
+body.dark-mode .modal-price-tag,
+body.dark-mode .modal-name-tag {
+    color: var(--text-color-dark);
+}
+body.dark-mode .add-to-cart-btn {
+    background-color: var(--primary-color); /* Or a dark-theme friendly primary */
+    color: #fff;
+}
+body.dark-mode .add-to-cart-btn:disabled {
+    background-color: #555;
+    color: #999;
+}
+
+
+body.dark-mode .display-option-btn {
+    background-color: #444;
+    color: var(--text-color-dark);
+    border: 1px solid #555;
+}
+body.dark-mode .display-option-btn.active {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+body.dark-mode .display-option-btn:hover:not(.active) {
+    background-color: #555;
+}
+
+/* === Theme Switch Styles (Dark Mode Toggle in Settings Modal) === */
+.settings-modal-content .settings-section {
+    margin-bottom: 20px; /* Spacing between sections */
+}
+.settings-modal-content .settings-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: inherit; /* Inherit from .modal-content */
+}
+
+.settings-section .switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+  background-color: var(--switch-track-light);
+  border-radius: 28px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  vertical-align: middle; /* Align with text if any */
+  box-sizing: border-box;
+}
+
+.settings-section .switch input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+/* The visual "knob" of the switch */
+.settings-section .switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px; /* height - 2*padding */
+  height: 22px;
+  background-color: var(--switch-knob-light);
+  border-radius: 50%;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Icons inside the switch */
+.settings-section .switch .fa-sun,
+.settings-section .switch .fa-moon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  transition: opacity 0.2s ease;
+  pointer-events: none; /* So they don't interfere with clicks on the label */
+}
+
+.settings-section .switch .fa-sun {
+  right: 7px; /* Position sun icon towards the right */
+  opacity: 1; /* Visible in light mode */
+  color: var(--icon-sun-color);
+}
+
+.settings-section .switch .fa-moon {
+  left: 7px;  /* Position moon icon towards the left */
+  opacity: 0; /* Hidden in light mode */
+  color: var(--icon-moon-color); /* Will be shown in dark mode */
+}
+
+/* When dark mode is active (body.dark-mode is present) */
+body.dark-mode .settings-section .switch {
+  background-color: var(--switch-track-dark);
+}
+
+body.dark-mode .settings-section .switch::after {
+  transform: translateX(22px); /* Moves knob to the right: switch_width - knob_width - 2*padding_left_of_knob */
+                               /* 50 - 22 - (2*3) = 22px approx. */
+  background-color: var(--switch-knob-dark);
+}
+
+body.dark-mode .settings-section .switch .fa-sun {
+  opacity: 0; /* Hide sun in dark mode */
+}
+
+body.dark-mode .settings-section .switch .fa-moon {
+  opacity: 1; /* Show moon in dark mode */
+}
+
+body.dark-mode .toast {
+    background-color: var(--toast-bg-dark);
+    color: var(--toast-text-dark);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    border-left-color: var(--primary-color); /* Adjust if primary color doesn't fit dark theme */
+}
+body.dark-mode .toast.error {
+    border-left-color: #e74c3c; /* Lighter red for dark mode error */
+}
+
+button:focus-visible,
+input[type="checkbox"]:focus-visible + label.switch, /* For the custom switch */
+[role="button"]:focus-visible,
+a:focus-visible,
+input[type="text"]:focus-visible,
+input[type="search"]:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25); /* Optional: softer glow */
+}
+
+body.dark-mode button:focus-visible,
+body.dark-mode [role="button"]:focus-visible,
+body.dark-mode a:focus-visible,
+body.dark-mode input[type="text"]:focus-visible,
+body.dark-mode input[type="search"]:focus-visible {
+  outline-color: #4dabf7; /* Lighter blue for dark mode focus */
+  box-shadow: 0 0 0 4px rgba(77, 171, 247, 0.3);
+}
+/* Remove default outline if using custom focus-visible */
+button, input[type="checkbox"], [role="button"], a, input[type="text"], input[type="search"] {
+    outline: none;
+}
+
+/* Add any other global styles or component-specific styles below */
+
+/* Global scrollbar styles */
+body::-webkit-scrollbar {
+    width: 8px;
+}
+body::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+body::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 10px;
+}
+/* --- FIM DO CSS --- */
