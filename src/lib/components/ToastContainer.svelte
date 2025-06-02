@@ -54,7 +54,7 @@
 
   /* Altura e padding para torná-lo discreto */
   height: auto; /* Altura baseada no conteúdo */
-  padding: 3px 5px; /* <-- Padding mais estreito */
+  padding: 0;
   box-sizing: border-box; /* Mantido para width: 100% */
 
   /* Sombra discreta */
