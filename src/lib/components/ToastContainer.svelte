@@ -71,9 +71,6 @@
   align-items: center;
   gap: 0.75rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transform: translateY(-100%);
-  transition: opacity 0.3s ease, transform 0.3s ease;
   cursor: pointer;
   min-width: 250px;
   max-width: 400px;
@@ -82,6 +79,7 @@
   outline: none;
   font: inherit;
   text-align: left;
+  /* Remover opacity e transform daqui */
 }
 .toast.visible {
   opacity: 1;
